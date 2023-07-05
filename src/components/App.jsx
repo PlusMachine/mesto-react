@@ -1,15 +1,149 @@
 import '../index.css';
 import Header from './Header/Header';
 import Main from './Main/Main';
-import Footer from './Footer/Footer'
+import Footer from './Footer/Footer';
+import PopupWithForm from './PopupWithForm/PopupWithForm';
+import ImagePopup from './ImagePopup/ImagePopup';
+import { useState } from 'react';
 
 function App() {
+
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+
+  function handleEditProfileClick() {
+    setIsEditProfilePopupOpen(true)
+  }
+
+  function handleEditAvatarClick() {
+    setIsEditAvatarPopupOpen(true)
+  }
+
+  function handleAddPlaceClick() {
+    setIsAddPlacePopupOpen(true)
+  }
+
+  // handleDeleteClick(){
+
+  // }
+
+  // handleImageClick(){
+
+  // }
+
+
   return (
     <div className="page-content">
       <Header />
-      <Main />
+
+      <Main
+        onEditProfile={handleEditProfileClick}
+        onEditAvatar={handleEditAvatarClick}
+        onAddPlace={handleAddPlaceClick}
+      />
+
       <Footer />
-      <section className="popup popup-edit">
+
+      <PopupWithForm
+        name='edit-profile'
+        title='Редактировать профиль'
+        isOpen={isEditProfilePopupOpen}
+      >
+        <fieldset className="popup__input-container">
+          <input
+            type="text"
+            id="name-input"
+            className="popup__form-field popup__form-field_input_name"
+            name="name"
+            required=""
+            minLength={2}
+            maxLength={40}
+            placeholder="Имя"
+          />
+          <span className="popup__form-input-error name-input-error" />
+          <input
+            type="text"
+            id="about-input"
+            className="popup__form-field popup__form-field_input_about"
+            name="about"
+            placeholder="Профессия"
+            required=""
+            minLength={2}
+            maxLength={200}
+          />
+          <span className="popup__form-input-error about-input-error" />
+        </fieldset>
+      </PopupWithForm>
+
+      <PopupWithForm
+        name='edit-avatar'
+        title='Обновить аватар'
+        isOpen={isEditAvatarPopupOpen}
+      >
+        <fieldset className="popup__input-container">
+          <input
+            type="text"
+            id="title-input"
+            className="popup__form-field popup__form-field_input_title"
+            name="title"
+            required=""
+            placeholder="Название"
+            minLength={2}
+            maxLength={30}
+          />
+          <span className="popup__form-input-error title-input-error" />
+          <input
+            type="url"
+            id="link-input"
+            className="popup__form-field popup__form-field_input_link"
+            name="link"
+            required=""
+            placeholder="Ссылка на картинку"
+          />
+          <span className="popup__form-input-error link-input-error" />
+        </fieldset>
+      </PopupWithForm>
+
+      <PopupWithForm
+        name='add-card'
+        title='Новое место'
+        titleButton='Создать'
+        isOpen={isAddPlacePopupOpen}
+      >
+        <fieldset className="popup__input-container">
+          <input
+            type="text"
+            id="title-input"
+            className="popup__form-field popup__form-field_input_title"
+            name="title"
+            required=""
+            placeholder="Название"
+            minLength={2}
+            maxLength={30}
+          />
+          <span className="popup__form-input-error title-input-error" />
+          <input
+            type="url"
+            id="link-input"
+            className="popup__form-field popup__form-field_input_link"
+            name="link"
+            required=""
+            placeholder="Ссылка на картинку"
+          />
+          <span className="popup__form-input-error link-input-error" />
+        </fieldset>
+      </PopupWithForm>
+
+      <PopupWithForm
+        name='delete-card'
+        title='Вы уверены?'
+        titleButton='Да'
+      />
+
+      <ImagePopup />
+
+      {/* <section className="popup popup-edit">
         <div className="popup__container">
           <button className="popup__close-button" type="button">
             <img
@@ -158,7 +292,7 @@ function App() {
             </button>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 }
