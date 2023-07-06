@@ -12,7 +12,7 @@ export default function ImagePopup({ card, onClose, isOpen }) {
           />
         </button>
         <img src={card.link} alt={card.name} className="popup__img" />
-        <h2 className="popup__photo-title"> </h2>
+        <h2 className="popup__photo-title">{card.name}</h2>
       </div>
     </section>
   )
