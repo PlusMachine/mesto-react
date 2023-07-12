@@ -1,5 +1,5 @@
 .elements__basket {
-  display: none;
+  display: block;
   transition: opacity 0.3s;
 }
 

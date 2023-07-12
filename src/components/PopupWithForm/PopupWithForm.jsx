@@ -1,6 +1,10 @@
 import closeIcon from '../../images/CloseIcon.svg';
 
-export default function PopupWithForm({ name, title, buttonText, children, isOpen, onClose }) {
+export default function PopupWithForm({ name, title, buttonText, children, isOpen, onClose, onSubmit }) {
+  function handleSubmitClick(card) {
+    onSubmit(card)
+  }
+
   return (
     <section className={`popup popup_type_${name} ${isOpen && 'popup_is-opened'}`}>
       <div className="popup__container">
@@ -13,8 +17,9 @@ export default function PopupWithForm({ name, title, buttonText, children, isOpe
         </button>
         <form
           className="popup__form popup__form-edit"
-          name="change-profile"
+          name={name}
           noValidate=""
+          onSubmit={handleSubmitClick}
         >
           <h2 className="popup__title">{title}</h2>
           {children}
