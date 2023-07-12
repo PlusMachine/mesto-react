@@ -1,8 +1,8 @@
 import closeIcon from '../../images/CloseIcon.svg';
 
 export default function PopupWithForm({ name, title, buttonText, children, isOpen, onClose, onSubmit }) {
-  function handleSubmitClick(card) {
-    onSubmit(card)
+  function handleSubmitClick(e) {
+    onSubmit(e);
   }
 
   return (

@@ -1,13 +1,14 @@
 import Header from './Header/Header';
 import Main from './Main/Main';
 import Footer from './Footer/Footer';
-import PopupWithForm from './PopupWithForm/PopupWithForm';
 import ImagePopup from './ImagePopup/ImagePopup';
 import { useEffect, useState } from 'react';
 import api from '../utils/api';
 import CurrentUserContext from './contexts/CurrentUserContext';
 import PopupWithConfirmation from './ConfirmationPopup/ConfirmationPopup';
 import EditProfilePopup from './EditProfilePopup/EditProfilePopup';
+import EditAvatarPopup from './EditAvatarPopup/EditAvatarPopup'
+import AddPlacePopup from './AddPlacePopup/AddPlacePopup';
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -70,8 +71,7 @@ function App() {
           setIsLoading(false);
         }
         ).catch((error => console.error(`Ошибка при получении массива карточек или информации о пользователе ${error}`)))
-    }, []
-  )
+    }, [])
 
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
@@ -87,6 +87,22 @@ function App() {
         });
   }
 
+  function handleUpdateUser({ name, about }) {
+    api.updateProfileInfo(name, about).then(res => setCurrentUser(res)).catch((error) => console.error(`Ошибка при обновлении профиля ${error}`));
+    closeAllPopups();
+  }
+
+
+  function handleUpdateAvatar({ avatar }) {
+    api.updateAvatar(avatar).then((res) => { setCurrentUser(res) }).catch((error => console.error(`Ошибка при попытке сменить аватар ${error}`)));
+    closeAllPopups();
+  }
+
+  function handleAddPlaceSubmit({ title, link }) {
+    api.addCard(title, link).then((res) => setCards([res, ...cards])).catch((error => console.error(`Ошибка при попытке создать новую карточку ${error}`)))
+
+    closeAllPopups();
+  }
 
 
   return (
@@ -110,68 +126,20 @@ function App() {
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
+          onUpdateUser={handleUpdateUser}
         />
 
-        <PopupWithForm
-          name='edit-avatar'
-          title='Обновить аватар'
+        <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
-        >
-          <fieldset className="popup__input-container">
-            <input
-              type="text"
-              id="title-input"
-              className="popup__form-field popup__form-field_input_title"
-              name="title"
-              required=""
-              placeholder="Название"
-              minLength={2}
-              maxLength={30}
-            />
-            <span className="popup__form-input-error title-input-error" />
-            <input
-              type="url"
-              id="link-input"
-              className="popup__form-field popup__form-field_input_link"
-              name="link"
-              required=""
-              placeholder="Ссылка на картинку"
-            />
-            <span className="popup__form-input-error link-input-error" />
-          </fieldset>
-        </PopupWithForm>
+          onUpdateAvatar={handleUpdateAvatar}
+        />
 
-        <PopupWithForm
-          name='add-card'
-          title='Новое место'
-          buttonText='Создать'
+        <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
-        >
-          <fieldset className="popup__input-container">
-            <input
-              type="text"
-              id="title-input"
-              className="popup__form-field popup__form-field_input_title"
-              name="title"
-              required=""
-              placeholder="Название"
-              minLength={2}
-              maxLength={30}
-            />
-            <span className="popup__form-input-error title-input-error" />
-            <input
-              type="url"
-              id="link-input"
-              className="popup__form-field popup__form-field_input_link"
-              name="link"
-              required=""
-              placeholder="Ссылка на картинку"
-            />
-            <span className="popup__form-input-error link-input-error" />
-          </fieldset>
-        </PopupWithForm>
+          onAddPlace={handleAddPlaceSubmit}
+        />
 
         <PopupWithConfirmation
           name='delete-card'

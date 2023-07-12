@@ -12,7 +12,6 @@ export default function PopupWithConfirmation({ title, isOpen, onClose, buttonTe
       buttonText={buttonText}
       onClose={onClose}
       onSubmit={handleSubmitClickDelete}
-      card={card}
       title={title}
       name='popup-confirm'
     />
