@@ -47,8 +47,8 @@ function App() {
   function deleteCard(card) {
     api.deleteCard(card._id).then(() => {
       setCards((state) => state.filter((c) => c._id !== card._id));
+      closeAllPopups();
     }).catch((error) => console.error(`Ошибка при удалении карточки ${error}`))
-    closeAllPopups();
   }
 
   function handleCardClick(card) {
@@ -79,29 +79,25 @@ function App() {
       api.deleteLike(card._id)
         .then((newCard) => {
           setCards((state) => (state.map((c) => c._id === card._id ? newCard : c)));
-        })
+        }).catch((error => console.error(`Ошибка при попытке удаления лайка ${error}`)))
       :
       api.addLike(card._id)
         .then((newCard) => {
           setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-        });
+        }).catch((error => console.error(`Ошибка при попытке постановки лайка ${error}`)))
   }
 
   function handleUpdateUser({ name, about }) {
-    api.updateProfileInfo(name, about).then(res => setCurrentUser(res)).catch((error) => console.error(`Ошибка при обновлении профиля ${error}`));
-    closeAllPopups();
+    api.updateProfileInfo(name, about).then(res => { setCurrentUser(res); closeAllPopups() }).catch((error) => console.error(`Ошибка при обновлении профиля ${error}`));
   }
 
 
   function handleUpdateAvatar({ avatar }) {
-    api.updateAvatar(avatar).then((res) => { setCurrentUser(res) }).catch((error => console.error(`Ошибка при попытке сменить аватар ${error}`)));
-    closeAllPopups();
+    api.updateAvatar(avatar).then((res) => { setCurrentUser(res); closeAllPopups(); }).catch((error => console.error(`Ошибка при попытке сменить аватар ${error}`)));
   }
 
   function handleAddPlaceSubmit({ title, link }) {
-    api.addCard(title, link).then((res) => setCards([res, ...cards])).catch((error => console.error(`Ошибка при попытке создать новую карточку ${error}`)))
-
-    closeAllPopups();
+    api.addCard(title, link).then((res) => { setCards([res, ...cards]); closeAllPopups() }).catch((error => console.error(`Ошибка при попытке создать новую карточку ${error}`)))
   }
 
 

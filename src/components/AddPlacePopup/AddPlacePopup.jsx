@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PopupWithForm from "../PopupWithForm/PopupWithForm";
 
 export default function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
@@ -9,11 +9,16 @@ export default function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
     setFormValues({ ...formValues, [name]: value })
   }
 
+  useEffect(() => {
+    setFormValues({ title: '', link: '' })
+  }, [isOpen]);
+
   function handleSubmit(e) {
     e.preventDefault();
     onAddPlace({ title: formValues.title, link: formValues.link });
 
   }
+
 
   return (<PopupWithForm
     name='add-card'
@@ -34,6 +39,7 @@ export default function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
         placeholder="Название"
         minLength={2}
         maxLength={30}
+        value={formValues.title}
       />
       <span className="popup__form-input-error title-input-error" />
       <input
@@ -44,6 +50,7 @@ export default function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
         name="link"
         required=""
         placeholder="Ссылка на картинку"
+        value={formValues.link}
       />
       <span className="popup__form-input-error link-input-error" />
     </fieldset>
